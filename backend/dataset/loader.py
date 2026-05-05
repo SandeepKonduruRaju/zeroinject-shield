@@ -1,8 +1,8 @@
+import csv
 import json
 import os
-import csv
-from typing import List, Dict, Any
 import random
+from typing import Any
 
 DATASET_DIR = os.path.dirname(os.path.abspath(__file__))
 # Root datasets/ folder (workspace level, sibling of backend/)
@@ -38,12 +38,12 @@ FALLBACK_SAMPLES = [
 ]
 
 
-def load_jailbreakbench() -> List[str]:
+def load_jailbreakbench() -> list[str]:
     """Load attack prompts from JailbreakBench dataset."""
     json_path = os.path.join(DATASET_DIR, "jailbreakbench.json")
     if os.path.exists(json_path):
         try:
-            with open(json_path, "r", encoding="utf-8") as f:
+            with open(json_path, encoding="utf-8") as f:
                 data = json.load(f)
             if isinstance(data, list):
                 prompts = []
@@ -64,7 +64,7 @@ def load_jailbreakbench() -> List[str]:
     if os.path.exists(csv_path):
         try:
             prompts = []
-            with open(csv_path, "r", encoding="utf-8") as f:
+            with open(csv_path, encoding="utf-8") as f:
                 reader = csv.DictReader(f)
                 for row in reader:
                     for key in ("Goal", "goal", "behavior", "prompt", "text"):
@@ -79,12 +79,12 @@ def load_jailbreakbench() -> List[str]:
     return [s["prompt"] for s in FALLBACK_SAMPLES if s["label"] == "injection"]
 
 
-def load_qualifire() -> List[Dict[str, Any]]:
+def load_qualifire() -> list[dict[str, Any]]:
     """Load labeled samples from Qualifire dataset."""
     json_path = os.path.join(DATASET_DIR, "qualifire.json")
     if os.path.exists(json_path):
         try:
-            with open(json_path, "r", encoding="utf-8") as f:
+            with open(json_path, encoding="utf-8") as f:
                 data = json.load(f)
             if isinstance(data, list):
                 results = []
@@ -103,7 +103,7 @@ def load_qualifire() -> List[Dict[str, Any]]:
     if os.path.exists(csv_path):
         try:
             results = []
-            with open(csv_path, "r", encoding="utf-8") as f:
+            with open(csv_path, encoding="utf-8") as f:
                 reader = csv.DictReader(f)
                 for row in reader:
                     for key in ("Goal", "goal", "behavior", "prompt", "text"):
@@ -118,7 +118,7 @@ def load_qualifire() -> List[Dict[str, Any]]:
     return FALLBACK_SAMPLES
 
 
-def get_demo_samples(n: int = 20) -> List[Dict[str, Any]]:
+def get_demo_samples(n: int = 20) -> list[dict[str, Any]]:
     """Return a balanced mix of injection and legitimate samples."""
     injections = load_jailbreakbench()
     all_labeled = load_qualifire()

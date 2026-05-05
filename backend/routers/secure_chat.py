@@ -1,15 +1,17 @@
-import time
 import json
 import logging
+import time
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from db.database import get_db
+
 from db import crud
-from pipeline.sanitizer import sanitize_input
-from pipeline.verifier import run_verifiers
+from db.database import get_db
+from pipeline.chatbot import call_chatbot
 from pipeline.consensus import compute_consensus
 from pipeline.policy import decide_action, get_block_response
-from pipeline.chatbot import call_chatbot
+from pipeline.sanitizer import sanitize_input
+from pipeline.verifier import run_verifiers
 
 router = APIRouter()
 
@@ -224,5 +226,5 @@ async def secure_chat(request: dict, db: Session = Depends(get_db)):
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Middleware error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Middleware error: {str(e)}") from e
 

@@ -1,17 +1,17 @@
+import json
+
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
-from typing import Optional, List
-from db.database import get_db
+
 from db import crud
-from models.schemas import LogEntry
-import json
+from db.database import get_db
 
 router = APIRouter()
 
 
 @router.get("/logs")
 async def get_logs(
-    verdict: Optional[str] = Query(None),
+    verdict: str | None = Query(None),
     limit: int = Query(100, ge=1, le=500),
     db: Session = Depends(get_db),
 ):

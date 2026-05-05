@@ -1,8 +1,8 @@
-from sqlalchemy.orm import Session
+
 from sqlalchemy import func
+from sqlalchemy.orm import Session
+
 from db.database import AnalysisLog, DemoRun
-from typing import Optional
-import json
 
 
 def create_log(db: Session, data: dict) -> AnalysisLog:
@@ -13,7 +13,7 @@ def create_log(db: Session, data: dict) -> AnalysisLog:
     return log
 
 
-def get_logs(db: Session, verdict: Optional[str] = None, limit: int = 100):
+def get_logs(db: Session, verdict: str | None = None, limit: int = 100):
     query = db.query(AnalysisLog)
     if verdict:
         query = query.filter(AnalysisLog.verdict == verdict.upper())

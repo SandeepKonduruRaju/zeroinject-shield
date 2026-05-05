@@ -1,9 +1,9 @@
-from sqlalchemy import create_engine, Column, Integer, String, Float, Boolean, DateTime, Text, inspect, text
-from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.orm import sessionmaker
-from datetime import datetime
 import os
+from datetime import datetime
+
 from dotenv import load_dotenv
+from sqlalchemy import Boolean, Column, Float, Integer, String, Text, create_engine, inspect, text
+from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 load_dotenv()
 

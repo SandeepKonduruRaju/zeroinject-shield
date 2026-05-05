@@ -1,15 +1,17 @@
-import time
 import json
 import logging
+import time
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from db.database import get_db
-from db import crud
+
 from dataset.loader import get_demo_samples
+from db import crud
+from db.database import get_db
+from models.schemas import DemoBatchResult
+from pipeline.consensus import compute_consensus
 from pipeline.sanitizer import sanitize_input
 from pipeline.verifier import run_verifiers
-from pipeline.consensus import compute_consensus
-from models.schemas import DemoBatchResult
 
 router = APIRouter()
 

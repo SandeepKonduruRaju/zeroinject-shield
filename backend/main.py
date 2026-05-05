@@ -1,11 +1,13 @@
 import os
+from contextlib import asynccontextmanager
+
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
-from db.database import create_tables
-from routers import analyze, logs, stats, demo, secure_chat
+
 from dataset.loader import is_dataset_loaded
-from contextlib import asynccontextmanager
+from db.database import create_tables
+from routers import analyze, demo, logs, secure_chat, stats
 
 load_dotenv()
 

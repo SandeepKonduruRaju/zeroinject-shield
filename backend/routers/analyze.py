@@ -1,13 +1,15 @@
-import time
 import json
+import time
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+
+from db import crud
+from db.database import get_db
 from models.schemas import AnalyzeRequest, ConsensusResult
+from pipeline.consensus import compute_consensus
 from pipeline.sanitizer import sanitize_input
 from pipeline.verifier import run_verifiers
-from pipeline.consensus import compute_consensus
-from db.database import get_db
-from db import crud
 
 router = APIRouter()
 
@@ -67,4 +69,4 @@ async def analyze_input(request: AnalyzeRequest, db: Session = Depends(get_db)):
         return result
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}") from e

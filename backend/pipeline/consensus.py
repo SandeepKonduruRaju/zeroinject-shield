@@ -1,4 +1,3 @@
-from typing import List
 
 WEIGHTS = {0: 0.35, 1: 0.40, 2: 0.25}
 
@@ -6,7 +5,7 @@ THRESHOLD_BLOCKED = 0.7
 THRESHOLD_FLAGGED = 0.4
 
 
-def compute_consensus(agent_verdicts: List[dict], was_sanitized: bool, processing_time_ms: int) -> dict:
+def compute_consensus(agent_verdicts: list[dict], was_sanitized: bool, processing_time_ms: int) -> dict:
     """
     Compute weighted consensus from agent verdicts.
     Returns full consensus result dict.

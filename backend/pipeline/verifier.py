@@ -1,8 +1,9 @@
-import time
 import json
 import os
-from groq import Groq
+import time
+
 from dotenv import load_dotenv
+from groq import Groq
 
 AGENT1_MODEL = "llama-3.3-70b-versatile"
 AGENT2_MODEL = "llama-3.1-8b-instant"
