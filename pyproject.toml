@@ -22,3 +22,11 @@ known-first-party = ["pipeline", "routers", "db", "models", "dataset"]
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
+
+[tool.pytest.ini_options]
+testpaths = ["backend/tests"]
+pythonpath = ["backend"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
