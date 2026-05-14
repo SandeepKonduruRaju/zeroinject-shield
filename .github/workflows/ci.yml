@@ -1,0 +1,60 @@
+# CI pipeline — runs on every push and every pull request to main.
+# Purpose: catch lint errors and failing tests before they reach main.
+
+name: CI
+
+on:
+  push:
+    branches: ["main", "feat/**", "fix/**", "chore/**"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  lint-and-test:
+    name: Lint & Test (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        # Test against Python 3.11 and 3.13.
+        # 3.11 = minimum required (pyproject.toml), 3.13 = current dev version.
+        python-version: ["3.11", "3.13"]
+
+    steps:
+      # 1. Check out your code onto the GitHub Actions runner VM.
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Install the requested Python version.
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          # Cache pip downloads so the next run is faster.
+          cache: "pip"
+          cache-dependency-path: "backend/requirements*.txt"
+
+      # 3. Install production + dev dependencies.
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --prefer-binary -r backend/requirements.txt
+          pip install -r backend/requirements-dev.txt
+
+      # 4. Run ruff linter — fails the build if any rule is violated.
+      #    This is the same command we ran locally in Phase 1.
+      - name: Lint with ruff
+        run: ruff check backend/
+
+      # 5. Run all tests with coverage.
+      #    --tb=short shows a compact traceback on failure (easier to read in CI logs).
+      - name: Run tests
+        run: |
+          pytest backend/tests/ \
+            --tb=short \
+            --cov=backend/pipeline \
+            --cov-report=term-missing
+        env:
+          # Tests don't make real API calls, but the app imports os.getenv("GROQ_API_KEY").
+          # Set a dummy value so imports don't fail during test collection.
+          GROQ_API_KEY: test-key-not-used-in-unit-tests
