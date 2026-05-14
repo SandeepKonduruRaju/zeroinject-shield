@@ -6,8 +6,8 @@ The function is pure: same inputs always produce the same outputs.
 """
 
 import pytest
-from pipeline.consensus import compute_consensus, THRESHOLD_BLOCKED, THRESHOLD_FLAGGED
 
+from pipeline.consensus import THRESHOLD_BLOCKED, THRESHOLD_FLAGGED, compute_consensus
 
 # ── Helpers ────────────────────────────────────────────────────────────────
 

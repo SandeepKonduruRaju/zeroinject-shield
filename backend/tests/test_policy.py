@@ -7,7 +7,6 @@ business-intent heuristic that prevents false positives on legitimate queries.
 
 from pipeline.policy import decide_action, get_block_response
 
-
 # ── decide_action: core score thresholds ───────────────────────────────────
 
 def test_high_score_returns_block():
