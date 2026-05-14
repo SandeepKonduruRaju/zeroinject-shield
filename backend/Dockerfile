@@ -12,7 +12,7 @@ WORKDIR /app
 # changed, Docker reuses the cached pip install layer and skips it entirely.
 # This makes rebuilds after code changes very fast.
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --prefer-binary -r requirements.txt
 
 # Now copy the source code.
 # This layer re-runs on every code change — but pip install above is cached.
