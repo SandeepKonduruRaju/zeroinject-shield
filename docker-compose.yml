@@ -1,0 +1,45 @@
+services:
+
+  # ── Backend API ───────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend        # Docker looks for Dockerfile here
+    ports:
+      - "8000:8000"             # host_port:container_port
+    env_file:
+      - ./backend/.env          # Loads GROQ_API_KEY etc. at runtime (not baked in)
+    volumes:
+      - db_data:/app            # Persist the SQLite database across restarts
+    restart: unless-stopped     # Auto-restart if the process crashes
+
+
+  # ── Security Dashboard (React) ────────────────────────────────────────────
+  dashboard:
+    build:
+      context: ./frontend
+      args:
+        # Pass the backend URL at BUILD time so Vite can bake it into the bundle.
+        # In production this would be your deployed backend URL.
+        VITE_API_URL: http://localhost:8000
+    ports:
+      - "5173:80"               # Nginx inside container runs on 80, we expose as 5173
+    depends_on:
+      - backend                 # Docker starts backend before dashboard
+    restart: unless-stopped
+
+
+  # ── E-commerce Sandbox (React) ────────────────────────────────────────────
+  ecommerce:
+    build:
+      context: ./frontend-business
+    ports:
+      - "5174:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+
+# Named volume so the SQLite database file survives `docker-compose down`.
+# Without this, the DB is deleted every time you stop the containers.
+volumes:
+  db_data:

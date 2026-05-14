@@ -1,0 +1,10 @@
+# Like .gitignore but for Docker — tells Docker what NOT to copy into the image.
+# Keeping the image lean and secrets out of images.
+.env
+*.db
+__pycache__/
+*.pyc
+.pytest_cache/
+htmlcov/
+.coverage
+tests/
