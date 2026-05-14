@@ -48,13 +48,38 @@ jobs:
 
       # 5. Run all tests with coverage.
       #    --tb=short shows a compact traceback on failure (easier to read in CI logs).
+      #    --cov-fail-under enforces a minimum coverage gate; the build fails if coverage drops.
       - name: Run tests
         run: |
           pytest backend/tests/ \
             --tb=short \
             --cov=backend/pipeline \
-            --cov-report=term-missing
+            --cov-report=term-missing \
+            --cov-fail-under=75
         env:
           # Tests don't make real API calls, but the app imports os.getenv("GROQ_API_KEY").
           # Set a dummy value so imports don't fail during test collection.
           GROQ_API_KEY: test-key-not-used-in-unit-tests
+
+  frontend-test:
+    name: Frontend Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm install
+
+      - name: Run frontend tests
+        working-directory: frontend
+        run: npm test

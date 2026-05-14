@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from 'react'
 import { businessData } from '../data/businessData'
 import { products } from '../data/products'
 
+const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+
 const QUICK_ACTIONS = [
   'Shipping Info',
   'Discounts',
@@ -131,7 +133,7 @@ export default function Chatbot() {
 
     if (securityOn) {
       try {
-        const response = await fetch('http://localhost:8000/api/secure-chat', {
+        const response = await fetch(`${API}/api/secure-chat`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ input: finalInput, original_input: userMsg }),

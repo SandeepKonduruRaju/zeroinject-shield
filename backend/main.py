@@ -18,19 +18,20 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="ZeroInject Shield API", version="1.0.0", lifespan=lifespan)
 
-# CORS
-frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5173")
+# CORS — ALLOWED_ORIGINS accepts a comma-separated list for multi-frontend deploys.
+# Example: "https://dashboard.vercel.app,https://ecommerce.vercel.app"
+_raw_origins = os.getenv("ALLOWED_ORIGINS", "")
+_extra = [o.strip() for o in _raw_origins.split(",") if o.strip()]
+
+_dev_origins = [
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "http://localhost:3000",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        frontend_url,
-        "http://localhost:5173", 
-        "http://localhost:3000", 
-        "http://localhost:5174",
-        "http://localhost:5175",
-        "http://localhost:5176",
-        "http://localhost:5177"
-    ],
+    allow_origins=_dev_origins + _extra,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

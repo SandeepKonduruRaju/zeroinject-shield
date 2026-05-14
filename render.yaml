@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: zeroinject-shield-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install --prefer-binary -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false          # Set manually in Render dashboard — never commit the real key
+      - key: DATABASE_URL
+        value: sqlite:///./zeroinject.db
+      - key: ALLOWED_ORIGINS
+        sync: false          # Set to your Vercel frontend URLs after deploying frontends
