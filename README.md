@@ -190,6 +190,7 @@ Render redeploys automatically.
 
 ## Troubleshooting
 
+*   **Render build fails (`Exited with status 1`)**: In the Render dashboard, set **Root Directory** to `backend` and **Environment** → `PYTHON_VERSION` = `3.11.11` (new Render services may default to Python 3.14, which can break `pip install`). Ensure `GROQ_API_KEY` is set before expecting live analysis.
 *   **`uvicorn: command not found`**: Make sure your virtual environment is activated (`activate`).
 *   **`ModuleNotFoundError`**: You likely skipped `pip install -r requirements.txt` or ran it outside the virtual environment.
 *   **Frontend shows "Unable to connect to API"**: Ensure the backend is actively listening on port `8000` and your frontend `.env` is structurally configured with `VITE_API_URL=http://localhost:8000`.

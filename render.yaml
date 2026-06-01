@@ -4,10 +4,13 @@ services:
     runtime: python
     plan: free
     rootDir: backend
-    buildCommand: pip install --prefer-binary -r requirements.txt
+    # Pin Python: new Render services default to 3.14, which breaks some pinned wheels.
+    buildCommand: pip install --upgrade pip && pip install --prefer-binary -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /api/health
     envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.11"
       - key: GROQ_API_KEY
         sync: false          # Set manually in Render dashboard — never commit the real key
       - key: DATABASE_URL
